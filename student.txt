@@ -1,0 +1,1617 @@
+Microsoft Windows [Versión 10.0.18363.719]
+(c) 2019 Microsoft Corporation. Todos los derechos reservados.
+
+D:\DJANGO\data-bridge-d3>D:\DJANGO\data-bridge-d3\venv\Scripts\activate.bat
+
+D:\DJANGO\data-bridge-d3>()
+
+(venv) D:\DJANGO\data-bridge-d3>python manage.py inspectdb
+# This is an auto-generated Django model module.
+# You'll have to do the following manually to clean this up:
+#   * Rearrange models' order
+#   * Make sure each model has one field with primary_key=True
+#   * Make sure each ForeignKey and OneToOneField has `on_delete` set to the desired behavior
+#   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
+# Feel free to rename the models, but don't rename db_table values or field names.
+from django.db import models
+
+
+class AcademicLevel(models.Model):
+    id_academic_level = models.CharField(primary_key=True, max_length=1024)
+    name = models.CharField(max_length=1024, blank=True, null=True)
+    cancelled = models.BooleanField()
+
+    class Meta:
+        managed = False
+        db_table = 'academic_level'
+
+
+class AcademicSituation(models.Model):
+    id_academic_situation = models.CharField(primary_key=True, max_length=1024)
+    name = models.CharField(max_length=1024, blank=True, null=True)
+    cancelled = models.BooleanField()
+    student_status_fk = models.CharField(max_length=1024, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'academic_situation'
+
+
+class ActivityType(models.Model):
+    activity_type_id = models.CharField(primary_key=True, max_length=1024)
+    name = models.CharField(max_length=1024, blank=True, null=True)
+    cancelled = models.BooleanField(blank=True, null=True)
+    sort = models.IntegerField(blank=True, null=True)
+    code = models.CharField(max_length=1024, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'activity_type'
+
+
+class ActivityTypeConfig(models.Model):
+    activity_type_config_id = models.CharField(primary_key=True, max_length=1024)
+    cant_hours = models.IntegerField(blank=True, null=True)
+    activity_type_fk = models.CharField(max_length=1024, blank=True, null=True)
+    subject_configuration_fk = models.CharField(max_length=1024, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'activity_type_config'
+
+
+class ActivityTypes2GroupPlannings(models.Model):
+    activity_types_fk = models.CharField(primary_key=True, max_length=1024)
+    group_plannings_fk = models.CharField(max_length=1024)
+
+    class Meta:
+        managed = False
+        db_table = 'activity_types2group_plannings'
+        unique_together = (('activity_types_fk', 'group_plannings_fk'),)
+
+
+class AdjustmentSubject(models.Model):
+    adjustment_subject_id = models.CharField(primary_key=True, max_length=1024)
+    real_time = models.IntegerField()
+    estimated_time = models.IntegerField()
+    cancelled = models.BooleanField()
+    subject_fk = models.ForeignKey('Subject', models.DO_NOTHING, db_column='subject_fk', blank=True, null=True)
+    career_fk = models.ForeignKey('Career', models.DO_NOTHING, db_column='career_fk', blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'adjustment_subject'
+        unique_together = (('subject_fk', 'career_fk'),)
+
+
+class AssignStudyProgramMotive(models.Model):
+    assign_study_program_motive_id = models.CharField(primary_key=True, max_length=1024)
+    name = models.CharField(max_length=1024, blank=True, null=True)
+    cancelled = models.BooleanField()
+
+    class Meta:
+        managed = False
+        db_table = 'assign_study_program_motive'
+
+
+class AssignedDepartment(models.Model):
+    assigned_department_id = models.CharField(primary_key=True, max_length=1024)
+    department_fk = models.ForeignKey('Department', models.DO_NOTHING, db_column='department_fk', blank=True, null=True)
+    discipline_fk = models.ForeignKey('Discipline', models.DO_NOTHING, db_column='discipline_fk', blank=True, null=True)
+    study_program_version_fk = models.ForeignKey('StudyProgramVersion', models.DO_NOTHING, db_column='study_program_version_fk', blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'assigned_department'
+
+
+class AssignedStudyProgramVersion(models.Model):
+    assigned_study_program_version_id = models.CharField(primary_key=True, max_length=1024)
+    date = models.DateField(blank=True, null=True)
+    cancelled = models.BooleanField()
+    study_program_version_fk = models.ForeignKey('StudyProgramVersion', models.DO_NOTHING, db_column='study_program_version_fk', blank=True, null=True)
+    student_fk = models.ForeignKey('Student', models.DO_NOTHING, db_column='student_fk', blank=True, null=True)
+    assign_study_program_motive_fk = models.ForeignKey(AssignStudyProgramMotive, models.DO_NOTHING, db_column='assign_study_program_motive_fk', blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'assigned_study_program_version'
+
+
+class AssignedSubject(models.Model):
+    assigned_subject_id = models.CharField(primary_key=True, max_length=1024)
+    period = models.IntegerField()
+    cancelled = models.BooleanField()
+    assigned_subject_fk = models.ForeignKey('self', models.DO_NOTHING, db_column='assigned_subject_fk', blank=True, null=True)
+    assigned_subject_type_fk = models.ForeignKey('AssignedSubjectType', models.DO_NOTHING, db_column='assigned_subject_type_fk', blank=True, null=True)
+    year = models.IntegerField(blank=True, null=True)
+    averageable = models.BooleanField(blank=True, null=True)
+    name = models.CharField(max_length=1024, blank=True, null=True)
+    to_certification = models.BooleanField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'assigned_subject'
+
+
+class AssignedSubjectGroup(models.Model):
+    assigned_subject_group_id = models.CharField(primary_key=True, max_length=-1)
+    department_fk = models.ForeignKey('Department', models.DO_NOTHING, db_column='department_fk', blank=True, null=True)
+    subject_group_fk = models.ForeignKey('SubjectGroup', models.DO_NOTHING, db_column='subject_group_fk', blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'assigned_subject_group'
+
+
+class AssignedSubjectType(models.Model):
+    assigned_subject_type_id = models.CharField(primary_key=True, max_length=1024)
+    name = models.CharField(max_length=1024, blank=True, null=True)
+    cancelled = models.BooleanField()
+
+    class Meta:
+        managed = False
+        db_table = 'assigned_subject_type'
+
+
+class AssignedSubjects2StudyProgra(models.Model):
+    study_program_versions_fk = models.OneToOneField('StudyProgramVersion', models.DO_NOTHING, db_column='study_program_versions_fk', primary_key=True)
+    assigned_subjects_fk = models.ForeignKey(AssignedSubject, models.DO_NOTHING, db_column='assigned_subjects_fk')
+
+    class Meta:
+        managed = False
+        db_table = 'assigned_subjects2study_progra'
+        unique_together = (('study_program_versions_fk', 'assigned_subjects_fk'),)
+
+
+class AssistanceRecord(models.Model):
+    assistance_record_id = models.CharField(primary_key=True, max_length=1024)
+    date = models.DateField(blank=True, null=True)
+    week = models.IntegerField(blank=True, null=True)
+    professor_name = models.CharField(max_length=1024, blank=True, null=True)
+    activity_type_fk = models.ForeignKey(ActivityType, models.DO_NOTHING, db_column='activity_type_fk', blank=True, null=True)
+    student_fk = models.ForeignKey('Student', models.DO_NOTHING, db_column='student_fk', blank=True, null=True)
+    group_fk = models.ForeignKey('Xgroup', models.DO_NOTHING, db_column='group_fk', blank=True, null=True)
+    professor_fk = models.ForeignKey('Professor', models.DO_NOTHING, db_column='professor_fk', blank=True, null=True)
+    subject_fk = models.ForeignKey('Subject', models.DO_NOTHING, db_column='subject_fk', blank=True, null=True)
+    first_assistance = models.BooleanField(blank=True, null=True)
+    second_assistance = models.BooleanField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'assistance_record'
+
+
+class AssistantStudentFile(models.Model):
+    id_assistant_student_file = models.CharField(primary_key=True, max_length=1024)
+    date = models.DateTimeField(blank=True, null=True)
+    cancelled = models.BooleanField(blank=True, null=True)
+    student_fk = models.ForeignKey('Student', models.DO_NOTHING, db_column='student_fk', blank=True, null=True)
+    assistant_student_status_fk = models.ForeignKey('AssistantStudentStatus', models.DO_NOTHING, db_column='assistant_student_status_fk', blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'assistant_student_file'
+
+
+class AssistantStudentStatus(models.Model):
+    id_assistant_student_status = models.CharField(primary_key=True, max_length=1024)
+    name = models.CharField(max_length=1024, blank=True, null=True)
+    cancelled = models.BooleanField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'assistant_student_status'
+
+
+class Award(models.Model):
+    id_award = models.CharField(primary_key=True, max_length=1024)
+    position = models.IntegerField()
+    increment = models.FloatField()
+    cancelled = models.BooleanField()
+
+    class Meta:
+        managed = False
+        db_table = 'award'
+
+
+class Bonus(models.Model):
+    id_bonus = models.CharField(primary_key=True, max_length=1024)
+    event = models.CharField(max_length=1024, blank=True, null=True)
+    increment = models.FloatField()
+    cancelled = models.BooleanField()
+
+    class Meta:
+        managed = False
+        db_table = 'bonus'
+
+
+class Career(models.Model):
+    id_career = models.CharField(primary_key=True, max_length=1024)
+    cancelled = models.BooleanField()
+    faculty_fk = models.CharField(max_length=1024, blank=True, null=True)
+    town_university_fk = models.CharField(max_length=1024, blank=True, null=True)
+    national_career_fk = models.CharField(max_length=1024, blank=True, null=True)
+    course_type_fk = models.CharField(max_length=1024, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'career'
+
+
+class Country(models.Model):
+    id_country = models.CharField(primary_key=True, max_length=1024)
+    name = models.CharField(max_length=1024, blank=True, null=True)
+    cancelled = models.BooleanField()
+    code = models.CharField(max_length=-1, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'country'
+
+
+class Course(models.Model):
+    id_course = models.CharField(primary_key=True, max_length=1024)
+    name = models.CharField(max_length=1024, blank=True, null=True)
+    cancelled = models.BooleanField()
+    matriculate_course = models.BooleanField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'course'
+
+
+class CourseType(models.Model):
+    id_course_type = models.CharField(primary_key=True, max_length=1024)
+    code = models.CharField(max_length=1024, blank=True, null=True)
+    name = models.CharField(max_length=1024, blank=True, null=True)
+    debts = models.IntegerField()
+    cancelled = models.BooleanField()
+    short_name = models.CharField(max_length=1024, blank=True, null=True)
+    behavior = models.CharField(max_length=1024, blank=True, null=True)
+    modality = models.CharField(max_length=1024, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'course_type'
+
+
+class CourseTypes2DropMotives(models.Model):
+    drop_motives_fk = models.OneToOneField('DropMotive', models.DO_NOTHING, db_column='drop_motives_fk', primary_key=True)
+    course_types_fk = models.ForeignKey(CourseType, models.DO_NOTHING, db_column='course_types_fk')
+
+    class Meta:
+        managed = False
+        db_table = 'course_types2drop_motives'
+        unique_together = (('drop_motives_fk', 'course_types_fk'),)
+
+
+class CualitativeEvaluation(models.Model):
+    cualitative_evaluation_id = models.CharField(primary_key=True, max_length=1024)
+    name = models.CharField(max_length=1024, blank=True, null=True)
+    abbreviation = models.CharField(max_length=1024, blank=True, null=True)
+    cancelled = models.BooleanField(blank=True, null=True)
+    priority = models.IntegerField()
+
+    class Meta:
+        managed = False
+        db_table = 'cualitative_evaluation'
+
+
+class DSSReportTrace(models.Model):
+    trace_id = models.CharField(primary_key=True, max_length=1024)
+    date_time = models.DateTimeField(blank=True, null=True)
+    access_code = models.CharField(max_length=1024, blank=True, null=True)
+    user_fk = models.ForeignKey('Xuser', models.DO_NOTHING, db_column='user_fk', blank=True, null=True)
+    report_fk = models.ForeignKey('Report', models.DO_NOTHING, db_column='report_fk', blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'd_s_s_report_trace'
+
+
+class DeletedStudent(models.Model):
+    id = models.CharField(primary_key=True, max_length=1024)
+    identification = models.CharField(max_length=1024, blank=True, null=True)
+    name = models.CharField(max_length=1024, blank=True, null=True)
+    middle_name = models.CharField(max_length=1024, blank=True, null=True)
+    last_name = models.CharField(max_length=1024, blank=True, null=True)
+    id_faculty = models.CharField(max_length=1024, blank=True, null=True)
+    idcareer = models.CharField(max_length=1024, blank=True, null=True)
+    id_course_type = models.CharField(max_length=1024, blank=True, null=True)
+    user_name = models.CharField(max_length=1024, blank=True, null=True)
+    date = models.DateField(blank=True, null=True)
+    idcourse = models.CharField(max_length=1024, blank=True, null=True)
+    elimination_motive = models.CharField(max_length=1024, blank=True, null=True)
+    host = models.CharField(max_length=1024, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'deleted_student'
+
+
+class Department(models.Model):
+    department_id = models.CharField(primary_key=True, max_length=1024)
+    name = models.CharField(max_length=1024, blank=True, null=True)
+    cancelled = models.BooleanField(blank=True, null=True)
+    town_university_fk = models.CharField(max_length=1024, blank=True, null=True)
+    faculty_fk = models.CharField(max_length=1024, blank=True, null=True)
+    code = models.CharField(max_length=1024, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'department'
+
+
+class Discipline(models.Model):
+    discipline_id = models.CharField(primary_key=True, max_length=1024)
+    objectives = models.CharField(max_length=1024, blank=True, null=True)
+    program = models.CharField(max_length=1024, blank=True, null=True)
+    cancelled = models.BooleanField()
+    code = models.CharField(max_length=1024, blank=True, null=True)
+    career_fk = models.CharField(max_length=1024, blank=True, null=True)
+    discipline_name_fk = models.CharField(max_length=1024, blank=True, null=True)
+    department_fk = models.CharField(max_length=1024, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'discipline'
+
+
+class DisciplineName(models.Model):
+    discipline_name_id = models.CharField(primary_key=True, max_length=1024)
+    name = models.CharField(max_length=1024, blank=True, null=True)
+    code = models.CharField(max_length=1024, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'discipline_name'
+
+
+class DocentCharge(models.Model):
+    docent_charge_id = models.CharField(primary_key=True, max_length=1024)
+    course_fk = models.CharField(max_length=1024, blank=True, null=True)
+    professor_fk = models.CharField(max_length=1024, blank=True, null=True)
+    cancelled = models.BooleanField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'docent_charge'
+
+
+class DropMotive(models.Model):
+    id_drop_motive = models.CharField(primary_key=True, max_length=1024)
+    name = models.CharField(max_length=1024, blank=True, null=True)
+    cancelled = models.BooleanField()
+    temporal = models.BooleanField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'drop_motive'
+
+
+class EntryEvaluation(models.Model):
+    id_entry_evaluation = models.CharField(primary_key=True, max_length=1024)
+    mark = models.FloatField()
+    entry_subject_fk = models.ForeignKey('EntrySubject', models.DO_NOTHING, db_column='entry_subject_fk', blank=True, null=True)
+    student_fk = models.ForeignKey('Student', models.DO_NOTHING, db_column='student_fk', blank=True, null=True)
+    matriculated_student_fk = models.ForeignKey('MatriculatedStudent', models.DO_NOTHING, db_column='matriculated_student_fk', blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'entry_evaluation'
+
+
+class EntrySource(models.Model):
+    id_entry_source = models.CharField(primary_key=True, max_length=1024)
+    name = models.CharField(max_length=1024, blank=True, null=True)
+    cancelled = models.BooleanField()
+
+    class Meta:
+        managed = False
+        db_table = 'entry_source'
+
+
+class EntrySubject(models.Model):
+    id_entry_subject = models.CharField(primary_key=True, max_length=1024)
+    name = models.CharField(max_length=1024, blank=True, null=True)
+    cancelled = models.BooleanField()
+
+    class Meta:
+        managed = False
+        db_table = 'entry_subject'
+
+
+class Evaluation(models.Model):
+    id_evaluation = models.CharField(primary_key=True, max_length=1024)
+    cancelled = models.BooleanField()
+    professor_name = models.CharField(max_length=1024, blank=True, null=True)
+    student_fk = models.ForeignKey('Student', models.DO_NOTHING, db_column='student_fk', blank=True, null=True)
+    examination_type_fk = models.ForeignKey('ExaminationType', models.DO_NOTHING, db_column='examination_type_fk', blank=True, null=True)
+    evaluation_value_fk = models.ForeignKey('EvaluationValue', models.DO_NOTHING, db_column='evaluation_value_fk', blank=True, null=True)
+    matriculated_subject_fk = models.ForeignKey('MatriculatedSubject', models.DO_NOTHING, db_column='matriculated_subject_fk', blank=True, null=True)
+    user_name = models.CharField(max_length=1024, blank=True, null=True)
+    registration_date = models.DateTimeField(blank=True, null=True)
+    evaluation_date = models.DateTimeField(blank=True, null=True)
+    host = models.CharField(max_length=1024, blank=True, null=True)
+    deleted = models.BooleanField()
+    motive = models.CharField(max_length=1024, blank=True, null=True)
+    validated = models.BooleanField(blank=True, null=True)
+    examination_acta_fk = models.CharField(max_length=1024, blank=True, null=True)
+    exam_mark_fk = models.CharField(max_length=1024, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'evaluation'
+
+
+class EvaluationType(models.Model):
+    evaluation_type_id = models.CharField(primary_key=True, max_length=1024)
+    name = models.CharField(max_length=1024, blank=True, null=True)
+    cancelled = models.BooleanField()
+
+    class Meta:
+        managed = False
+        db_table = 'evaluation_type'
+
+
+class EvaluationValue(models.Model):
+    id_evaluation_value = models.CharField(primary_key=True, max_length=1024)
+    value = models.CharField(max_length=1024, blank=True, null=True)
+    cancelled = models.BooleanField()
+
+    class Meta:
+        managed = False
+        db_table = 'evaluation_value'
+
+
+class EvaluationsCuts(models.Model):
+    evaluations_cuts_id = models.CharField(primary_key=True, max_length=1024)
+    name = models.CharField(max_length=1024, blank=True, null=True)
+    abbreviation = models.CharField(max_length=1024, blank=True, null=True)
+    cancelled = models.BooleanField(blank=True, null=True)
+    priority = models.IntegerField()
+
+    class Meta:
+        managed = False
+        db_table = 'evaluations_cuts'
+
+
+class EvaluativeCourtHeader(models.Model):
+    evaluative_court_header_id = models.CharField(primary_key=True, max_length=1024)
+    registration_date = models.DateField(blank=True, null=True)
+    delivery_date = models.DateField(blank=True, null=True)
+    cancelled = models.BooleanField()
+    delivered = models.BooleanField()
+    group_planning_fk = models.ForeignKey('GroupPlanning', models.DO_NOTHING, db_column='group_planning_fk', blank=True, null=True)
+    professor_fk = models.ForeignKey('Professor', models.DO_NOTHING, db_column='professor_fk', blank=True, null=True)
+    evaluations_cuts_fk = models.ForeignKey(EvaluationsCuts, models.DO_NOTHING, db_column='evaluations_cuts_fk', blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'evaluative_court_header'
+
+
+class ExaminationActa(models.Model):
+    id_examination_acta = models.CharField(primary_key=True, max_length=1024)
+    professor_name = models.CharField(max_length=1024, blank=True, null=True)
+    examination_type_fk = models.CharField(max_length=1024, blank=True, null=True)
+    group_fk = models.CharField(max_length=1024, blank=True, null=True)
+    course_type_fk = models.CharField(max_length=1024, blank=True, null=True)
+    subject_name_fk = models.CharField(max_length=1024, blank=True, null=True)
+    career_fk = models.CharField(max_length=1024, blank=True, null=True)
+    course_fk = models.CharField(max_length=1024, blank=True, null=True)
+    professor_fk = models.CharField(max_length=1024, blank=True, null=True)
+    subject_fk = models.CharField(max_length=1024, blank=True, null=True)
+    closed = models.BooleanField(blank=True, null=True)
+    validated = models.BooleanField(blank=True, null=True)
+    close_date = models.DateField(blank=True, null=True)
+    validate_date = models.DateField(blank=True, null=True)
+    examination_date = models.DateField(blank=True, null=True)
+    secretary_name = models.CharField(max_length=1024, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'examination_acta'
+
+
+class ExaminationType(models.Model):
+    id_examination_type = models.CharField(primary_key=True, max_length=1024)
+    name = models.CharField(max_length=1024, blank=True, null=True)
+    cancelled = models.BooleanField()
+    priority = models.IntegerField(blank=True, null=True)
+    sort = models.IntegerField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'examination_type'
+
+
+class Faculties2Users(models.Model):
+    faculties_fk = models.OneToOneField('Faculty', models.DO_NOTHING, db_column='faculties_fk', primary_key=True)
+    users_fk = models.ForeignKey('Xuser', models.DO_NOTHING, db_column='users_fk')
+
+    class Meta:
+        managed = False
+        db_table = 'faculties2users'
+        unique_together = (('faculties_fk', 'users_fk'),)
+
+
+class Faculty(models.Model):
+    id_faculty = models.CharField(primary_key=True, max_length=1024)
+    name = models.CharField(max_length=1024, blank=True, null=True)
+    address = models.CharField(max_length=1024, blank=True, null=True)
+    phone_number = models.CharField(max_length=1024, blank=True, null=True)
+    dean_name = models.CharField(max_length=1024, blank=True, null=True)
+    secretary_name = models.CharField(max_length=1024, blank=True, null=True)
+    cancelled = models.BooleanField()
+    town_fk = models.CharField(max_length=1024, blank=True, null=True)
+    university_fk = models.CharField(max_length=1024, blank=True, null=True)
+    code = models.CharField(max_length=1024, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'faculty'
+
+
+class FatherInformation(models.Model):
+    id_father_information = models.CharField(primary_key=True, max_length=1024)
+    name = models.CharField(max_length=1024, blank=True, null=True)
+    salary = models.FloatField(blank=True, null=True)
+    dead = models.BooleanField()
+    student_fk = models.OneToOneField('Student', models.DO_NOTHING, db_column='student_fk', blank=True, null=True)
+    academic_level_fk = models.CharField(max_length=1024, blank=True, null=True)
+    ocupation_fk = models.CharField(max_length=1024, blank=True, null=True)
+    politic_org_fk = models.CharField(max_length=1024, blank=True, null=True)
+    matriculated_student_fk = models.ForeignKey('MatriculatedStudent', models.DO_NOTHING, db_column='matriculated_student_fk', blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'father_information'
+
+
+class GroupPlanning(models.Model):
+    group_planning_id = models.CharField(primary_key=True, max_length=1024)
+    assign_end_mark = models.BooleanField(blank=True, null=True)
+    cancelled = models.BooleanField(blank=True, null=True)
+    subject_configuration_fk = models.CharField(max_length=1024, blank=True, null=True)
+    docent_charge_fk = models.CharField(max_length=1024, blank=True, null=True)
+    group_fk = models.CharField(max_length=1024, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'group_planning'
+
+
+class GroupType(models.Model):
+    id_group_type = models.CharField(primary_key=True, max_length=1024)
+    kind = models.CharField(max_length=1024, blank=True, null=True)
+    cancelled = models.BooleanField()
+
+    class Meta:
+        managed = False
+        db_table = 'group_type'
+
+
+class Groups2MatriculatedStudents(models.Model):
+    matriculated_students_fk = models.OneToOneField('MatriculatedStudent', models.DO_NOTHING, db_column='matriculated_students_fk', primary_key=True)
+    groups_fk = models.ForeignKey('Xgroup', models.DO_NOTHING, db_column='groups_fk')
+
+    class Meta:
+        managed = False
+        db_table = 'groups2matriculated_students'
+        unique_together = (('matriculated_students_fk', 'groups_fk'),)
+
+
+class Groups2Students(models.Model):
+    students_fk = models.ForeignKey('Student', models.DO_NOTHING, db_column='students_fk', blank=True, null=True)
+    groups_fk = models.ForeignKey('Xgroup', models.DO_NOTHING, db_column='groups_fk', blank=True, null=True)
+    id = models.CharField(primary_key=True, max_length=1024)
+    consecutive = models.IntegerField(blank=True, null=True)
+    student_group_type_fk = models.ForeignKey('StudentGroupType', models.DO_NOTHING, db_column='student_group_type_fk', blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'groups2students'
+        unique_together = (('students_fk', 'groups_fk'),)
+
+
+class Handicap(models.Model):
+    id_handicap = models.CharField(primary_key=True, max_length=1024)
+    kind = models.CharField(max_length=1024, blank=True, null=True)
+    cancelled = models.BooleanField()
+
+    class Meta:
+        managed = False
+        db_table = 'handicap'
+
+
+class Handicaps2MatriculatedStudent(models.Model):
+    handicaps_fk = models.OneToOneField(Handicap, models.DO_NOTHING, db_column='handicaps_fk', primary_key=True)
+    matriculated_students_fk = models.ForeignKey('MatriculatedStudent', models.DO_NOTHING, db_column='matriculated_students_fk')
+
+    class Meta:
+        managed = False
+        db_table = 'handicaps2matriculated_student'
+        unique_together = (('handicaps_fk', 'matriculated_students_fk'),)
+
+
+class Handicaps2Students(models.Model):
+    handicaps_fk = models.OneToOneField(Handicap, models.DO_NOTHING, db_column='handicaps_fk', primary_key=True)
+    students_fk = models.CharField(max_length=1024)
+
+    class Meta:
+        managed = False
+        db_table = 'handicaps2students'
+        unique_together = (('handicaps_fk', 'students_fk'),)
+
+
+class LaboralInformation(models.Model):
+    id_laboral_information = models.CharField(primary_key=True, max_length=1024)
+    center_name = models.CharField(max_length=1024, blank=True, null=True)
+    address = models.CharField(max_length=1024, blank=True, null=True)
+    phone = models.CharField(max_length=1024, blank=True, null=True)
+    salary = models.FloatField(blank=True, null=True)
+    boss_name = models.CharField(max_length=1024, blank=True, null=True)
+    matriculated_student_fk = models.ForeignKey('MatriculatedStudent', models.DO_NOTHING, db_column='matriculated_student_fk', blank=True, null=True)
+    ocupation_fk = models.CharField(max_length=1024, blank=True, null=True)
+    student_fk = models.OneToOneField('Student', models.DO_NOTHING, db_column='student_fk', blank=True, null=True)
+    town_fk = models.CharField(max_length=1024, blank=True, null=True)
+    syndicate_fk = models.CharField(max_length=1024, blank=True, null=True)
+    organism_fk = models.CharField(max_length=1024, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'laboral_information'
+
+
+class Licence(models.Model):
+    id_licence = models.CharField(primary_key=True, max_length=1024)
+    end_date = models.DateTimeField(blank=True, null=True)
+    drop_fk = models.CharField(max_length=1024, blank=True, null=True)
+    licence_motive_fk = models.ForeignKey('LicenceMotive', models.DO_NOTHING, db_column='licence_motive_fk', blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'licence'
+
+
+class LicenceMotive(models.Model):
+    id_licence_motive = models.CharField(primary_key=True, max_length=1024)
+    name = models.CharField(max_length=1024, blank=True, null=True)
+    cancelled = models.BooleanField()
+
+    class Meta:
+        managed = False
+        db_table = 'licence_motive'
+
+
+class MaritalStatus(models.Model):
+    id_marital_status = models.CharField(primary_key=True, max_length=1024)
+    kind = models.CharField(max_length=1024, blank=True, null=True)
+    cancelled = models.BooleanField()
+
+    class Meta:
+        managed = False
+        db_table = 'marital_status'
+
+
+class MatriculatedStudent(models.Model):
+    id_matriculated_student = models.CharField(primary_key=True, max_length=1024)
+    identification = models.CharField(max_length=1024, blank=True, null=True)
+    name = models.CharField(max_length=1024, blank=True, null=True)
+    first_name = models.CharField(max_length=1024, blank=True, null=True)
+    second_name = models.CharField(max_length=1024, blank=True, null=True)
+    native_of = models.CharField(max_length=1024, blank=True, null=True)
+    birth_date = models.DateField(blank=True, null=True)
+    address = models.CharField(max_length=1024, blank=True, null=True)
+    child_number = models.IntegerField()
+    phone = models.CharField(max_length=1024, blank=True, null=True)
+    email = models.CharField(max_length=1024, blank=True, null=True)
+    higher_education_in_date = models.DateField(blank=True, null=True)
+    university_in_date = models.DateField(blank=True, null=True)
+    inscription_date = models.DateTimeField(blank=True, null=True)
+    consecutive = models.IntegerField()
+    scale = models.FloatField(blank=True, null=True)
+    academic_index = models.FloatField(blank=True, null=True)
+    update = models.BooleanField()
+    country_fk = models.ForeignKey(Country, models.DO_NOTHING, db_column='country_fk', blank=True, null=True)
+    student_type_fk = models.ForeignKey('StudentType', models.DO_NOTHING, db_column='student_type_fk', blank=True, null=True)
+    marital_status_fk = models.ForeignKey(MaritalStatus, models.DO_NOTHING, db_column='marital_status_fk', blank=True, null=True)
+    study_regimen_fk = models.ForeignKey('StudyRegimen', models.DO_NOTHING, db_column='study_regimen_fk', blank=True, null=True)
+    scholastic_origin_fk = models.ForeignKey('ScholasticOrigin', models.DO_NOTHING, db_column='scholastic_origin_fk', blank=True, null=True)
+    town_fk = models.ForeignKey('Town', models.DO_NOTHING, db_column='town_fk', blank=True, null=True)
+    faculty_fk = models.ForeignKey(Faculty, models.DO_NOTHING, db_column='faculty_fk', blank=True, null=True)
+    town_university_fk = models.ForeignKey('TownUniversity', models.DO_NOTHING, db_column='town_university_fk', blank=True, null=True)
+    orphan_fk = models.ForeignKey('Orphan', models.DO_NOTHING, db_column='orphan_fk', blank=True, null=True)
+    skin_color_fk = models.ForeignKey('SkinColor', models.DO_NOTHING, db_column='skin_color_fk', blank=True, null=True)
+    academic_situation_fk = models.ForeignKey(AcademicSituation, models.DO_NOTHING, db_column='academic_situation_fk', blank=True, null=True)
+    sex_fk = models.ForeignKey('Sex', models.DO_NOTHING, db_column='sex_fk', blank=True, null=True)
+    course_type_fk = models.ForeignKey(CourseType, models.DO_NOTHING, db_column='course_type_fk', blank=True, null=True)
+    career_fk = models.ForeignKey(Career, models.DO_NOTHING, db_column='career_fk', blank=True, null=True)
+    politic_org_fk = models.ForeignKey('PoliticOrg', models.DO_NOTHING, db_column='politic_org_fk', blank=True, null=True)
+    entry_source_fk = models.ForeignKey(EntrySource, models.DO_NOTHING, db_column='entry_source_fk', blank=True, null=True)
+    photo = models.CharField(max_length=1024, blank=True, null=True)
+    reoffer = models.BooleanField(blank=True, null=True)
+    option = models.IntegerField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'matriculated_student'
+
+
+class MatriculatedStudents2ONGs(models.Model):
+    o_n_gs_fk = models.OneToOneField('ONG', models.DO_NOTHING, db_column='o_n_gs_fk', primary_key=True)
+    matriculated_students_fk = models.ForeignKey(MatriculatedStudent, models.DO_NOTHING, db_column='matriculated_students_fk')
+
+    class Meta:
+        managed = False
+        db_table = 'matriculated_students2o_n_gs'
+        unique_together = (('o_n_gs_fk', 'matriculated_students_fk'),)
+
+
+class MatriculatedStudents2Popular(models.Model):
+    popular_orgs_fk = models.OneToOneField('PopularOrg', models.DO_NOTHING, db_column='popular_orgs_fk', primary_key=True)
+    matriculated_students_fk = models.ForeignKey(MatriculatedStudent, models.DO_NOTHING, db_column='matriculated_students_fk')
+
+    class Meta:
+        managed = False
+        db_table = 'matriculated_students2popular_'
+        unique_together = (('popular_orgs_fk', 'matriculated_students_fk'),)
+
+
+class MatriculatedSubject(models.Model):
+    matriculated_subject_id = models.CharField(primary_key=True, max_length=1024)
+    period_number = models.IntegerField()
+    approved = models.BooleanField()
+    evaluated = models.BooleanField()
+    cancelled = models.BooleanField()
+    course_fk = models.ForeignKey(Course, models.DO_NOTHING, db_column='course_fk', blank=True, null=True)
+    student_fk = models.ForeignKey('Student', models.DO_NOTHING, db_column='student_fk', blank=True, null=True)
+    subject_fk = models.ForeignKey('Subject', models.DO_NOTHING, db_column='subject_fk', blank=True, null=True)
+    year = models.IntegerField(blank=True, null=True)
+    plan_year = models.IntegerField(blank=True, null=True)
+    averageable = models.BooleanField(blank=True, null=True)
+    matriculated_subject_type_fk = models.ForeignKey('MatriculatedSubjectType', models.DO_NOTHING, db_column='matriculated_subject_type_fk', blank=True, null=True)
+    matriculated_subject_situat_fk = models.ForeignKey('MatriculatedSubjectSituation', models.DO_NOTHING, db_column='matriculated_subject_situat_fk', blank=True, null=True)
+    matriculated_subject_reason_fk = models.ForeignKey('MatriculatedSubjectReason', models.DO_NOTHING, db_column='matriculated_subject_reason_fk', blank=True, null=True)
+    matriculated_student_fk = models.CharField(max_length=1024, blank=True, null=True)
+    tocertification = models.BooleanField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'matriculated_subject'
+
+
+class MatriculatedSubjectReason(models.Model):
+    matriculated_subject_reason_id = models.CharField(primary_key=True, max_length=1024)
+    name = models.CharField(max_length=1024, blank=True, null=True)
+    cancelled = models.BooleanField()
+
+    class Meta:
+        managed = False
+        db_table = 'matriculated_subject_reason'
+
+
+class MatriculatedSubjectSituation(models.Model):
+    matriculated_subject_situation = models.CharField(primary_key=True, max_length=1024)
+    situation = models.CharField(max_length=1024, blank=True, null=True)
+    cancelled = models.BooleanField()
+    evaluation = models.BooleanField()
+    abbreviation = models.CharField(max_length=1024, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'matriculated_subject_situation'
+
+
+class MatriculatedSubjectType(models.Model):
+    matriculated_subject_type_id = models.CharField(primary_key=True, max_length=1024)
+    name = models.CharField(max_length=1024, blank=True, null=True)
+    cancelled = models.BooleanField()
+
+    class Meta:
+        managed = False
+        db_table = 'matriculated_subject_type'
+
+
+class MilitarGrade(models.Model):
+    id_militar_grade = models.CharField(primary_key=True, max_length=1024)
+    name = models.CharField(max_length=1024, blank=True, null=True)
+    cancelled = models.BooleanField()
+
+    class Meta:
+        managed = False
+        db_table = 'militar_grade'
+
+
+class MilitarService(models.Model):
+    id_militar_service = models.CharField(primary_key=True, max_length=1024)
+    licence_date = models.DateField(blank=True, null=True)
+    militar_grade_fk = models.CharField(max_length=1024, blank=True, null=True)
+    militar_type_fk = models.CharField(max_length=1024, blank=True, null=True)
+    student_fk = models.OneToOneField('Student', models.DO_NOTHING, db_column='student_fk', blank=True, null=True)
+    militar_specialty_fk = models.CharField(max_length=1024, blank=True, null=True)
+    matriculated_student_fk = models.ForeignKey(MatriculatedStudent, models.DO_NOTHING, db_column='matriculated_student_fk', blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'militar_service'
+
+
+class MilitarSpecialty(models.Model):
+    id_militar_specialty = models.CharField(primary_key=True, max_length=1024)
+    name = models.CharField(max_length=1024, blank=True, null=True)
+    cancelled = models.BooleanField()
+
+    class Meta:
+        managed = False
+        db_table = 'militar_specialty'
+
+
+class MilitarType(models.Model):
+    id_militar_type = models.CharField(primary_key=True, max_length=1024)
+    kind = models.CharField(max_length=1024, blank=True, null=True)
+    cancelled = models.BooleanField()
+
+    class Meta:
+        managed = False
+        db_table = 'militar_type'
+
+
+class MotherInformation(models.Model):
+    id_mother_information = models.CharField(primary_key=True, max_length=1024)
+    name = models.CharField(max_length=1024, blank=True, null=True)
+    salary = models.FloatField(blank=True, null=True)
+    dead = models.BooleanField()
+    ocupation_fk = models.CharField(max_length=1024, blank=True, null=True)
+    matriculated_student_fk = models.ForeignKey(MatriculatedStudent, models.DO_NOTHING, db_column='matriculated_student_fk', blank=True, null=True)
+    politic_org_fk = models.CharField(max_length=1024, blank=True, null=True)
+    academic_level_fk = models.CharField(max_length=1024, blank=True, null=True)
+    student_fk = models.OneToOneField('Student', models.DO_NOTHING, db_column='student_fk', blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'mother_information'
+
+
+class NationalCareer(models.Model):
+    id_national_career = models.CharField(primary_key=True, max_length=1024)
+    code = models.CharField(max_length=1024, blank=True, null=True)
+    name = models.CharField(max_length=1024, blank=True, null=True)
+    diploma = models.CharField(max_length=1024, blank=True, null=True)
+    cancelled = models.BooleanField()
+    scienc_especialty_fk = models.CharField(max_length=1024, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'national_career'
+
+
+class ONG(models.Model):
+    id_o_n_g = models.CharField(primary_key=True, max_length=1024)
+    name = models.CharField(max_length=1024, blank=True, null=True)
+    cancelled = models.BooleanField()
+
+    class Meta:
+        managed = False
+        db_table = 'o_n_g'
+
+
+class ONGs2Students(models.Model):
+    o_n_gs_fk = models.OneToOneField(ONG, models.DO_NOTHING, db_column='o_n_gs_fk', primary_key=True)
+    students_fk = models.ForeignKey('Student', models.DO_NOTHING, db_column='students_fk')
+
+    class Meta:
+        managed = False
+        db_table = 'o_n_gs2students'
+        unique_together = (('o_n_gs_fk', 'students_fk'),)
+
+
+class Ocupation(models.Model):
+    id_ocupation = models.CharField(primary_key=True, max_length=1024)
+    name = models.CharField(max_length=1024, blank=True, null=True)
+    cancelled = models.BooleanField()
+
+    class Meta:
+        managed = False
+        db_table = 'ocupation'
+
+
+class OptionalCourse(models.Model):
+    optional_course_id = models.CharField(primary_key=True, max_length=1024)
+    real_time = models.IntegerField()
+    estimated_time = models.IntegerField()
+    cancelled = models.BooleanField()
+    subject_fk = models.ForeignKey('Subject', models.DO_NOTHING, db_column='subject_fk', blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'optional_course'
+
+
+class Organism(models.Model):
+    id_organism = models.CharField(primary_key=True, max_length=1024)
+    name = models.CharField(max_length=1024, blank=True, null=True)
+    cancelled = models.BooleanField()
+    code = models.CharField(max_length=-1, blank=True, null=True)
+    initials = models.CharField(max_length=-1, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'organism'
+
+
+class Orphan(models.Model):
+    id_orphan = models.CharField(primary_key=True, max_length=1024)
+    kind = models.CharField(max_length=1024, blank=True, null=True)
+    cancelled = models.BooleanField()
+
+    class Meta:
+        managed = False
+        db_table = 'orphan'
+
+
+class PeriodicEvaluation(models.Model):
+    periodic_evaluation_id = models.CharField(primary_key=True, max_length=1024)
+    periodic_evaluation_type_fk = models.ForeignKey('PeriodicEvaluationType', models.DO_NOTHING, db_column='periodic_evaluation_type_fk', blank=True, null=True)
+    user_name = models.CharField(max_length=1024, blank=True, null=True)
+    host = models.CharField(max_length=1024, blank=True, null=True)
+    cancelled = models.BooleanField(blank=True, null=True)
+    subject_fk = models.CharField(max_length=1024, blank=True, null=True)
+    student_fk = models.CharField(max_length=1024, blank=True, null=True)
+    group_fk = models.CharField(max_length=1024, blank=True, null=True)
+    date = models.DateField(blank=True, null=True)
+    week = models.IntegerField(blank=True, null=True)
+    professor_fk = models.CharField(max_length=1024, blank=True, null=True)
+    evaluation_value_fk = models.CharField(max_length=1024, blank=True, null=True)
+    professor_name = models.CharField(max_length=1024, blank=True, null=True)
+    deleted = models.BooleanField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'periodic_evaluation'
+
+
+class PeriodicEvaluationType(models.Model):
+    periodic_evaluation_type_id = models.CharField(primary_key=True, max_length=1024)
+    name = models.CharField(max_length=1024, blank=True, null=True)
+    code = models.CharField(max_length=1024, blank=True, null=True)
+    priority = models.IntegerField(blank=True, null=True)
+    cancelled = models.BooleanField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'periodic_evaluation_type'
+
+
+class PlannerResource(models.Model):
+    id = models.CharField(primary_key=True, max_length=1024)
+    resource_id = models.CharField(max_length=1024, blank=True, null=True)
+    resource_type = models.IntegerField()
+    user_fk = models.ForeignKey('Xuser', models.DO_NOTHING, db_column='user_fk', blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'planner_resource'
+
+
+class PoliticOrg(models.Model):
+    id_politic_org = models.CharField(primary_key=True, max_length=1024)
+    name = models.CharField(max_length=1024, blank=True, null=True)
+    cancelled = models.BooleanField()
+
+    class Meta:
+        managed = False
+        db_table = 'politic_org'
+
+
+class PopularOrg(models.Model):
+    id_popular_org = models.CharField(primary_key=True, max_length=1024)
+    name = models.CharField(max_length=1024, blank=True, null=True)
+    cancelled = models.BooleanField()
+
+    class Meta:
+        managed = False
+        db_table = 'popular_org'
+
+
+class PopularOrgs2Students(models.Model):
+    popular_orgs_fk = models.OneToOneField(PopularOrg, models.DO_NOTHING, db_column='popular_orgs_fk', primary_key=True)
+    students_fk = models.ForeignKey('Student', models.DO_NOTHING, db_column='students_fk')
+
+    class Meta:
+        managed = False
+        db_table = 'popular_orgs2students'
+        unique_together = (('popular_orgs_fk', 'students_fk'),)
+
+
+class PreinscriptionEvaluation(models.Model):
+    id_evaluation = models.CharField(primary_key=True, max_length=1024)
+    evaluation = models.FloatField()
+    entry_subject_fk = models.ForeignKey(EntrySubject, models.DO_NOTHING, db_column='entry_subject_fk', blank=True, null=True)
+    preinscription_student_fk = models.ForeignKey('PreinscriptionStudent', models.DO_NOTHING, db_column='preinscription_student_fk', blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'preinscription_evaluation'
+
+
+class PreinscriptionStudent(models.Model):
+    id_preinscription = models.CharField(primary_key=True, max_length=1024)
+    identification = models.CharField(max_length=1024, blank=True, null=True)
+    name = models.CharField(max_length=1024, blank=True, null=True)
+    middle_name = models.CharField(max_length=1024, blank=True, null=True)
+    last_name = models.CharField(max_length=1024, blank=True, null=True)
+    address = models.CharField(max_length=1024, blank=True, null=True)
+    academic_index = models.FloatField()
+    scale = models.FloatField()
+    option = models.IntegerField()
+    reoffer = models.BooleanField()
+    deferred = models.IntegerField()
+    national_career_fk = models.ForeignKey(NationalCareer, models.DO_NOTHING, db_column='national_career_fk', blank=True, null=True)
+    town_fk = models.ForeignKey('Town', models.DO_NOTHING, db_column='town_fk', blank=True, null=True)
+    entry_source_fk = models.ForeignKey(EntrySource, models.DO_NOTHING, db_column='entry_source_fk', blank=True, null=True)
+    mother_occupation_fk = models.ForeignKey(Ocupation, models.DO_NOTHING, db_column='mother_occupation_fk', blank=True, null=True)
+    country_fk = models.ForeignKey(Country, models.DO_NOTHING, db_column='country_fk', blank=True, null=True)
+    father_occupation_fk = models.ForeignKey(Ocupation, models.DO_NOTHING, db_column='father_occupation_fk', blank=True, null=True)
+    sex_fk = models.ForeignKey('Sex', models.DO_NOTHING, db_column='sex_fk', blank=True, null=True)
+    father_academic_level_fk = models.ForeignKey(AcademicLevel, models.DO_NOTHING, db_column='father_academic_level_fk', blank=True, null=True)
+    skin_color_fk = models.ForeignKey('SkinColor', models.DO_NOTHING, db_column='skin_color_fk', blank=True, null=True)
+    course_type_fk = models.ForeignKey(CourseType, models.DO_NOTHING, db_column='course_type_fk', blank=True, null=True)
+    mother_academic_level_fk = models.ForeignKey(AcademicLevel, models.DO_NOTHING, db_column='mother_academic_level_fk', blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'preinscription_student'
+
+
+class Professor(models.Model):
+    professor_id = models.CharField(primary_key=True, max_length=1024)
+    cancelled = models.BooleanField(blank=True, null=True)
+    user_fk = models.CharField(max_length=1024, blank=True, null=True)
+    department_fk = models.CharField(max_length=1024, blank=True, null=True)
+    scientific_category = models.CharField(max_length=1024, blank=True, null=True)
+    teaching_category = models.CharField(max_length=1024, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'professor'
+
+
+class Province(models.Model):
+    id_province = models.CharField(primary_key=True, max_length=1024)
+    name = models.CharField(max_length=1024, blank=True, null=True)
+    cancelled = models.BooleanField()
+    code = models.CharField(max_length=-1, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'province'
+
+
+class Report(models.Model):
+    report_id = models.CharField(primary_key=True, max_length=1024)
+    name = models.CharField(max_length=1024, blank=True, null=True)
+    description = models.CharField(max_length=1024, blank=True, null=True)
+    area = models.CharField(max_length=1024, blank=True, null=True)
+    type = models.CharField(max_length=1024, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'report'
+
+
+class ScholasticOrigin(models.Model):
+    id_scholastic_origin = models.CharField(primary_key=True, max_length=1024)
+    name = models.CharField(max_length=1024, blank=True, null=True)
+    cancelled = models.BooleanField()
+
+    class Meta:
+        managed = False
+        db_table = 'scholastic_origin'
+
+
+class SciencEspecialty(models.Model):
+    id_scienc_especialty = models.CharField(primary_key=True, max_length=1024)
+    name = models.CharField(max_length=1024, blank=True, null=True)
+    cancelled = models.BooleanField()
+
+    class Meta:
+        managed = False
+        db_table = 'scienc_especialty'
+
+
+class SecurityLevel(models.Model):
+    id = models.CharField(primary_key=True, max_length=1024)
+    name = models.CharField(max_length=1024, blank=True, null=True)
+    cancelled = models.BooleanField()
+    description = models.CharField(max_length=1024, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'security_level'
+
+
+class SecurityRole(models.Model):
+    id = models.CharField(primary_key=True, max_length=1024)
+    role_name = models.CharField(max_length=1024, blank=True, null=True)
+    group_name = models.CharField(max_length=1024, blank=True, null=True)
+    description = models.CharField(max_length=1024, blank=True, null=True)
+    role_link = models.CharField(max_length=1024, blank=True, null=True)
+    cancelled = models.BooleanField()
+
+    class Meta:
+        managed = False
+        db_table = 'security_role'
+
+
+class SecurityRoles2Users(models.Model):
+    security_roles_fk = models.OneToOneField(SecurityRole, models.DO_NOTHING, db_column='security_roles_fk', primary_key=True)
+    users_fk = models.ForeignKey('Xuser', models.DO_NOTHING, db_column='users_fk')
+
+    class Meta:
+        managed = False
+        db_table = 'security_roles2users'
+        unique_together = (('security_roles_fk', 'users_fk'),)
+
+
+class Sex(models.Model):
+    id_sex = models.CharField(primary_key=True, max_length=1024)
+    kind = models.CharField(max_length=1024, blank=True, null=True)
+    cancelled = models.BooleanField()
+
+    class Meta:
+        managed = False
+        db_table = 'sex'
+
+
+class SkinColor(models.Model):
+    id_skin_color = models.CharField(primary_key=True, max_length=1024)
+    name = models.CharField(max_length=1024, blank=True, null=True)
+    cancelled = models.BooleanField()
+
+    class Meta:
+        managed = False
+        db_table = 'skin_color'
+
+
+class Student(models.Model):
+    id_student = models.CharField(primary_key=True, max_length=1024)
+    identification = models.CharField(max_length=1024, blank=True, null=True)
+    name = models.CharField(max_length=1024, blank=True, null=True)
+    middle_name = models.CharField(max_length=1024, blank=True, null=True)
+    last_name = models.CharField(max_length=1024, blank=True, null=True)
+    native_of = models.CharField(max_length=1024, blank=True, null=True)
+    birth_date = models.DateField(blank=True, null=True)
+    address = models.CharField(max_length=1024, blank=True, null=True)
+    son_count = models.IntegerField(blank=True, null=True)
+    phone = models.CharField(max_length=1024, blank=True, null=True)
+    email = models.CharField(max_length=1024, blank=True, null=True)
+    higher_education_in_date = models.DateField(blank=True, null=True)
+    university_in_date = models.DateField(blank=True, null=True)
+    register_date = models.DateTimeField(blank=True, null=True)
+    scale = models.FloatField(blank=True, null=True)
+    academic_index = models.FloatField(blank=True, null=True)
+    country_fk = models.ForeignKey(Country, models.DO_NOTHING, db_column='country_fk')
+    student_type_fk = models.ForeignKey('StudentType', models.DO_NOTHING, db_column='student_type_fk')
+    career_fk = models.ForeignKey(Career, models.DO_NOTHING, db_column='career_fk', blank=True, null=True)
+    entry_source_fk = models.ForeignKey(EntrySource, models.DO_NOTHING, db_column='entry_source_fk')
+    course_type_fk = models.ForeignKey(CourseType, models.DO_NOTHING, db_column='course_type_fk')
+    scholastic_origin_fk = models.ForeignKey(ScholasticOrigin, models.DO_NOTHING, db_column='scholastic_origin_fk')
+    politic_org_fk = models.ForeignKey(PoliticOrg, models.DO_NOTHING, db_column='politic_org_fk')
+    sex_fk = models.ForeignKey(Sex, models.DO_NOTHING, db_column='sex_fk')
+    town_university_fk = models.ForeignKey('TownUniversity', models.DO_NOTHING, db_column='town_university_fk', blank=True, null=True)
+    marital_status_fk = models.ForeignKey(MaritalStatus, models.DO_NOTHING, db_column='marital_status_fk')
+    study_regimen_fk = models.ForeignKey('StudyRegimen', models.DO_NOTHING, db_column='study_regimen_fk')
+    academic_situation_fk = models.ForeignKey(AcademicSituation, models.DO_NOTHING, db_column='academic_situation_fk')
+    town_fk = models.ForeignKey('Town', models.DO_NOTHING, db_column='town_fk', blank=True, null=True)
+    skin_color_fk = models.ForeignKey(SkinColor, models.DO_NOTHING, db_column='skin_color_fk')
+    student_status_fk = models.ForeignKey('StudentStatus', models.DO_NOTHING, db_column='student_status_fk', blank=True, null=True)
+    faculty_fk = models.ForeignKey(Faculty, models.DO_NOTHING, db_column='faculty_fk', blank=True, null=True)
+    orphan_fk = models.ForeignKey(Orphan, models.DO_NOTHING, db_column='orphan_fk')
+    photo = models.CharField(max_length=1024, blank=True, null=True)
+    reoffer = models.BooleanField(blank=True, null=True)
+    option = models.IntegerField(blank=True, null=True)
+    block = models.BooleanField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'student'
+
+
+class StudentAward(models.Model):
+    id_award_student = models.CharField(primary_key=True, max_length=1024)
+    student_fk = models.CharField(max_length=1024, blank=True, null=True)
+    matriculated_subject_fk = models.CharField(max_length=1024, blank=True, null=True)
+    award_fk = models.CharField(max_length=1024, blank=True, null=True)
+    create_date = models.DateTimeField(blank=True, null=True)
+    user_name = models.CharField(max_length=1024, blank=True, null=True)
+    host = models.CharField(max_length=1024, blank=True, null=True)
+    course_fk = models.CharField(max_length=1024, blank=True, null=True)
+    assigned_date = models.DateTimeField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'student_award'
+
+
+class StudentBonus(models.Model):
+    id_bonus_student = models.CharField(primary_key=True, max_length=1024)
+    period = models.IntegerField()
+    create_date = models.DateTimeField(blank=True, null=True)
+    student_fk = models.CharField(max_length=1024, blank=True, null=True)
+    bonus_fk = models.CharField(max_length=1024, blank=True, null=True)
+    user_name = models.CharField(max_length=1024, blank=True, null=True)
+    host = models.CharField(max_length=1024, blank=True, null=True)
+    assigned_date = models.DateTimeField(blank=True, null=True)
+    course_fk = models.CharField(max_length=1024, blank=True, null=True)
+    description = models.CharField(max_length=1024, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'student_bonus'
+
+
+class StudentCut(models.Model):
+    student_cut_id = models.CharField(primary_key=True, max_length=1024)
+    cant_hours_ausent = models.IntegerField()
+    ausent_percent = models.FloatField()
+    date = models.DateField(blank=True, null=True)
+    evaluations_cuts_fk = models.ForeignKey(EvaluationsCuts, models.DO_NOTHING, db_column='evaluations_cuts_fk', blank=True, null=True)
+    cualitative_evaluation_fk = models.ForeignKey(CualitativeEvaluation, models.DO_NOTHING, db_column='cualitative_evaluation_fk', blank=True, null=True)
+    professor_fk = models.ForeignKey(Professor, models.DO_NOTHING, db_column='professor_fk', blank=True, null=True)
+    subject_fk = models.ForeignKey('Subject', models.DO_NOTHING, db_column='subject_fk', blank=True, null=True)
+    student_fk = models.ForeignKey(Student, models.DO_NOTHING, db_column='student_fk', blank=True, null=True)
+    group_fk = models.ForeignKey('Xgroup', models.DO_NOTHING, db_column='group_fk', blank=True, null=True)
+    consecutive = models.IntegerField(blank=True, null=True)
+    evaluative_court_header_fk = models.ForeignKey(EvaluativeCourtHeader, models.DO_NOTHING, db_column='evaluative_court_header_fk', blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'student_cut'
+
+
+class StudentGroupType(models.Model):
+    student_group_type_id = models.CharField(primary_key=True, max_length=1024)
+    name = models.CharField(max_length=1024, blank=True, null=True)
+    cancelled = models.BooleanField()
+    uniqued = models.BooleanField()
+
+    class Meta:
+        managed = False
+        db_table = 'student_group_type'
+
+
+class StudentStatus(models.Model):
+    id_student_status = models.CharField(primary_key=True, max_length=1024)
+    kind = models.CharField(max_length=1024, blank=True, null=True)
+    cancelled = models.BooleanField()
+
+    class Meta:
+        managed = False
+        db_table = 'student_status'
+
+
+class StudentStatusHistory(models.Model):
+    id_student_status_history = models.CharField(primary_key=True, max_length=1024)
+    date = models.DateTimeField(blank=True, null=True)
+    comment = models.CharField(max_length=1024, blank=True, null=True)
+    cancelled = models.BooleanField()
+    student_status_fk = models.ForeignKey(StudentStatus, models.DO_NOTHING, db_column='student_status_fk', blank=True, null=True)
+    student_fk = models.ForeignKey(Student, models.DO_NOTHING, db_column='student_fk', blank=True, null=True)
+    end_date = models.DateTimeField(blank=True, null=True)
+    previous_history_fk = models.ForeignKey('self', models.DO_NOTHING, db_column='previous_history_fk', blank=True, null=True)
+    course_fk = models.ForeignKey(Course, models.DO_NOTHING, db_column='course_fk', blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'student_status_history'
+
+
+class StudentType(models.Model):
+    id_student_class = models.CharField(primary_key=True, max_length=1024)
+    kind = models.CharField(max_length=1024, blank=True, null=True)
+    cancelled = models.BooleanField()
+
+    class Meta:
+        managed = False
+        db_table = 'student_type'
+
+
+class StudentVolumeFolio(models.Model):
+    volume_faculty = models.IntegerField(blank=True, null=True)
+    volume_institute = models.IntegerField(blank=True, null=True)
+    folio_faculty = models.IntegerField(blank=True, null=True)
+    folio_institute = models.IntegerField(blank=True, null=True)
+    student_fk = models.ForeignKey(Student, models.DO_NOTHING, db_column='student_fk', blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'student_volume_folio'
+
+
+class StudyProgram(models.Model):
+    study_program_id = models.CharField(primary_key=True, max_length=1024)
+    name = models.CharField(max_length=1024, blank=True, null=True)
+    periods_amount = models.IntegerField()
+    description = models.CharField(max_length=1024, blank=True, null=True)
+    cancelled = models.BooleanField()
+    study_program_name_fk = models.ForeignKey('StudyProgramName', models.DO_NOTHING, db_column='study_program_name_fk', blank=True, null=True)
+    career_fk = models.ForeignKey(Career, models.DO_NOTHING, db_column='career_fk', blank=True, null=True)
+    course_fk = models.ForeignKey(Course, models.DO_NOTHING, db_column='course_fk', blank=True, null=True)
+    approved = models.BooleanField()
+    years_amount = models.IntegerField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'study_program'
+
+
+class StudyProgramName(models.Model):
+    study_program_name_id = models.CharField(primary_key=True, max_length=1024)
+    name = models.CharField(max_length=1024, blank=True, null=True)
+    code = models.CharField(max_length=1024, blank=True, null=True)
+    cancelled = models.BooleanField()
+
+    class Meta:
+        managed = False
+        db_table = 'study_program_name'
+
+
+class StudyProgramVersion(models.Model):
+    study_program_version_id = models.CharField(primary_key=True, max_length=1024)
+    name = models.CharField(max_length=1024, blank=True, null=True)
+    cancelled = models.BooleanField()
+    study_program_fk = models.ForeignKey(StudyProgram, models.DO_NOTHING, db_column='study_program_fk', blank=True, null=True)
+    course_fk = models.ForeignKey(Course, models.DO_NOTHING, db_column='course_fk', blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'study_program_version'
+
+
+class StudyRegimen(models.Model):
+    id_study_regimen = models.CharField(primary_key=True, max_length=1024)
+    name = models.CharField(max_length=1024, blank=True, null=True)
+    cancelled = models.BooleanField()
+
+    class Meta:
+        managed = False
+        db_table = 'study_regimen'
+
+
+class Subject(models.Model):
+    subject_id = models.CharField(primary_key=True, max_length=1024)
+    topics_program = models.TextField(blank=True, null=True)
+    analytical_program = models.TextField(blank=True, null=True)
+    period = models.IntegerField(blank=True, null=True)
+    hours = models.IntegerField()
+    cancelled = models.BooleanField()
+    basic = models.BooleanField()
+    year = models.IntegerField(blank=True, null=True)
+    subject_name_fk = models.ForeignKey('SubjectName', models.DO_NOTHING, db_column='subject_name_fk', blank=True, null=True)
+    discipline_fk = models.ForeignKey(Discipline, models.DO_NOTHING, db_column='discipline_fk', blank=True, null=True)
+    evaluation_type_fk = models.ForeignKey(EvaluationType, models.DO_NOTHING, db_column='evaluation_type_fk', blank=True, null=True)
+    assigned_subject_fk = models.ForeignKey(AssignedSubject, models.DO_NOTHING, db_column='assigned_subject_fk', blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'subject'
+
+
+class SubjectConfiguration(models.Model):
+    subject_configuration_id = models.CharField(primary_key=True, max_length=1024)
+    cancelled = models.BooleanField(blank=True, null=True)
+    course_fk = models.CharField(max_length=1024, blank=True, null=True)
+    subject_fk = models.CharField(max_length=1024, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'subject_configuration'
+
+
+class SubjectGroup(models.Model):
+    id = models.CharField(primary_key=True, max_length=1024)
+    averageable = models.BooleanField()
+    matriculated_subject_type_fk = models.ForeignKey(MatriculatedSubjectType, models.DO_NOTHING, db_column='matriculated_subject_type_fk', blank=True, null=True)
+    subject_fk = models.ForeignKey(Subject, models.DO_NOTHING, db_column='subject_fk', blank=True, null=True)
+    group_fk = models.ForeignKey('Xgroup', models.DO_NOTHING, db_column='group_fk', blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'subject_group'
+        unique_together = (('subject_fk', 'group_fk'),)
+
+
+class SubjectName(models.Model):
+    subject_name_id = models.CharField(primary_key=True, max_length=1024)
+    code = models.CharField(max_length=1024, blank=True, null=True)
+    name = models.CharField(max_length=1024, blank=True, null=True)
+    abbreviation = models.CharField(max_length=1024, blank=True, null=True)
+    cancelled = models.BooleanField()
+
+    class Meta:
+        managed = False
+        db_table = 'subject_name'
+
+
+class Syndicate(models.Model):
+    id_syndicate = models.CharField(primary_key=True, max_length=1024)
+    name = models.CharField(max_length=1024, blank=True, null=True)
+    cancelled = models.BooleanField()
+
+    class Meta:
+        managed = False
+        db_table = 'syndicate'
+
+
+class Town(models.Model):
+    id_town = models.CharField(primary_key=True, max_length=1024)
+    name = models.CharField(max_length=1024, blank=True, null=True)
+    cancelled = models.BooleanField()
+    province_fk = models.CharField(max_length=1024, blank=True, null=True)
+    code = models.CharField(max_length=-1, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'town'
+
+
+class TownUniversities2Users(models.Model):
+    town_universities_fk = models.OneToOneField('TownUniversity', models.DO_NOTHING, db_column='town_universities_fk', primary_key=True)
+    users_fk = models.ForeignKey('Xuser', models.DO_NOTHING, db_column='users_fk')
+
+    class Meta:
+        managed = False
+        db_table = 'town_universities2users'
+        unique_together = (('town_universities_fk', 'users_fk'),)
+
+
+class TownUniversity(models.Model):
+    id_town_university = models.CharField(primary_key=True, max_length=1024)
+    name = models.CharField(max_length=1024, blank=True, null=True)
+    initial = models.CharField(max_length=1024, blank=True, null=True)
+    address = models.CharField(max_length=1024, blank=True, null=True)
+    phone_number = models.CharField(max_length=1024, blank=True, null=True)
+    fax = models.CharField(max_length=1024, blank=True, null=True)
+    rector_name = models.CharField(max_length=1024, blank=True, null=True)
+    general_secretary_name = models.CharField(max_length=1024, blank=True, null=True)
+    graduation_date = models.DateField(blank=True, null=True)
+    matriculation_end_date = models.DateField(blank=True, null=True)
+    rematriculation_begin_date = models.DateField(blank=True, null=True)
+    rematriculation_end_date = models.DateField(blank=True, null=True)
+    matriculation_begin_date = models.DateField(blank=True, null=True)
+    activities = models.CharField(max_length=1024, blank=True, null=True)
+    logo = models.CharField(max_length=1024, blank=True, null=True)
+    bylaw = models.CharField(max_length=1024, blank=True, null=True)
+    cancelled = models.BooleanField()
+    town_fk = models.CharField(max_length=1024, blank=True, null=True)
+    university_fk = models.CharField(max_length=1024, blank=True, null=True)
+    code = models.CharField(max_length=1024, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'town_university'
+
+
+class Transfer(models.Model):
+    id_transfer = models.CharField(primary_key=True, max_length=1024)
+    target_career_fk = models.ForeignKey(Career, models.DO_NOTHING, db_column='target_career_fk', blank=True, null=True)
+    source_career_fk = models.ForeignKey(Career, models.DO_NOTHING, db_column='source_career_fk', blank=True, null=True)
+    drop_fk = models.ForeignKey('Xdrop', models.DO_NOTHING, db_column='drop_fk', blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'transfer'
+
+
+class Universities2Users(models.Model):
+    universities_fk = models.OneToOneField('University', models.DO_NOTHING, db_column='universities_fk', primary_key=True)
+    users_fk = models.ForeignKey('Xuser', models.DO_NOTHING, db_column='users_fk')
+
+    class Meta:
+        managed = False
+        db_table = 'universities2users'
+        unique_together = (('universities_fk', 'users_fk'),)
+
+
+class University(models.Model):
+    id_university = models.CharField(primary_key=True, max_length=1024)
+    name = models.CharField(max_length=1024, blank=True, null=True)
+    initial = models.CharField(max_length=1024, blank=True, null=True)
+    address = models.CharField(max_length=1024, blank=True, null=True)
+    phone_number = models.CharField(max_length=1024, blank=True, null=True)
+    fax = models.CharField(max_length=1024, blank=True, null=True)
+    rector_name = models.CharField(max_length=1024, blank=True, null=True)
+    general_secretary_name = models.CharField(max_length=1024, blank=True, null=True)
+    graduation_date = models.DateField(blank=True, null=True)
+    matriculation_begin_date = models.DateField(blank=True, null=True)
+    matriculation_end_date = models.DateField(blank=True, null=True)
+    rematriculation_begin_date = models.DateField(blank=True, null=True)
+    rematriculation_end_date = models.DateField(blank=True, null=True)
+    activities = models.CharField(max_length=1024, blank=True, null=True)
+    logo = models.CharField(max_length=1024, blank=True, null=True)
+    bylaw = models.CharField(max_length=1024, blank=True, null=True)
+    cancelled = models.BooleanField()
+    course_fk = models.CharField(max_length=1024, blank=True, null=True)
+    town_fk = models.CharField(max_length=1024, blank=True, null=True)
+    code = models.CharField(max_length=1024, blank=True, null=True)
+    closure = models.BooleanField(blank=True, null=True)
+    start = models.BooleanField(blank=True, null=True)
+    promote = models.BooleanField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'university'
+
+
+class WSConnection(models.Model):
+    id = models.CharField(primary_key=True, max_length=1024)
+    wsdl_url = models.CharField(max_length=1024, blank=True, null=True)
+    enabled = models.BooleanField()
+    secured = models.BooleanField()
+    username = models.CharField(max_length=1024, blank=True, null=True)
+    password = models.CharField(max_length=1024, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'w_s_connection'
+
+
+class Xdrop(models.Model):
+    id_drop = models.CharField(primary_key=True, max_length=1024)
+    begin_date = models.DateTimeField(blank=True, null=True)
+    drop_motive_fk = models.ForeignKey(DropMotive, models.DO_NOTHING, db_column='drop_motive_fk', blank=True, null=True)
+    student_status_history_fk = models.CharField(max_length=1024, blank=True, null=True)
+    course_fk = models.ForeignKey(Course, models.DO_NOTHING, db_column='course_fk', blank=True, null=True)
+    comment = models.CharField(max_length=1024, blank=True, null=True)
+    year = models.CharField(max_length=1024, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'xdrop'
+
+
+class Xgroup(models.Model):
+    id_group = models.CharField(primary_key=True, max_length=1024)
+    name = models.CharField(max_length=1024, blank=True, null=True)
+    cancelled = models.BooleanField()
+    group_type_fk = models.ForeignKey(GroupType, models.DO_NOTHING, db_column='group_type_fk', blank=True, null=True)
+    career_fk = models.ForeignKey(Career, models.DO_NOTHING, db_column='career_fk', blank=True, null=True)
+    group_fk = models.ForeignKey('self', models.DO_NOTHING, db_column='group_fk', blank=True, null=True)
+    course_fk = models.ForeignKey(Course, models.DO_NOTHING, db_column='course_fk', blank=True, null=True)
+    study_program_version_fk = models.ForeignKey(StudyProgramVersion, models.DO_NOTHING, db_column='study_program_version_fk', blank=True, null=True)
+    period_ini = models.IntegerField(blank=True, null=True)
+    period_end = models.IntegerField(blank=True, null=True)
+    year = models.IntegerField(blank=True, null=True)
+    terminal = models.BooleanField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'xgroup'
+
+
+class Xuser(models.Model):
+    id = models.CharField(primary_key=True, max_length=1024)
+    username = models.CharField(max_length=1024, blank=True, null=True)
+    name = models.CharField(max_length=1024, blank=True, null=True)
+    password = models.CharField(max_length=1024, blank=True, null=True)
+    description = models.CharField(max_length=1024, blank=True, null=True)
+    security_level_fk = models.ForeignKey(SecurityLevel, models.DO_NOTHING, db_column='security_level_fk', blank=True, null=True)
+    surname = models.CharField(max_length=1024, blank=True, null=True)
+    last_surname = models.CharField(max_length=1024, blank=True, null=True)
+    identification = models.CharField(max_length=1024, blank=True, null=True)
+    email = models.CharField(max_length=1024, blank=True, null=True)
+    cancelled = models.BooleanField()
+    blocked = models.BooleanField()
+    remote_user = models.BooleanField()
+    last_login_ip = models.CharField(max_length=1024, blank=True, null=True)
+    last_login_date = models.DateTimeField(blank=True, null=True)
+    question = models.CharField(max_length=1024, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'xuser'
+
+(venv) D:\DJANGO\data-bridge-d3>
